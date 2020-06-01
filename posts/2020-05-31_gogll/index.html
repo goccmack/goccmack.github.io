@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en" itemscope itemtype="http://schema.org/WebPage">
+  <head>
+    
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <title>GoGLL: General Context-free Parsing Made Easy - goccmack</title>
+  <meta name="description" content="Generalised LL (GLL) parsing is a practical technique of parsing general context-free grammars. Gogll is an open source compiler kit that generates a GLL parser and a finite state automaton (FSA) based lexer for any context-free grammar.
+What is GLL? Generalised LL (GLL) parsing [Scott 2010,2012] is a parsing technique that that can handle any context-free grammar. It parses from left to right and produces a parse forest containing all valid parse trees.">
+  <meta name="author" content="Marius Ackerman"/><script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "WebSite",
+    "name": "goccmack",
+    
+    "url": "https:\/\/username.github.io"
+}
+</script><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Organization",
+  "name": "",
+  "url": "https:\/\/username.github.io"
+  
+  
+  
+  
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "item": {
+          "@id": "https:\/\/username.github.io",
+          "name": "home"
+        }
+    },{
+        "@type": "ListItem",
+        "position": 3,
+        "item": {
+          "@id": "https:\/\/username.github.io\/posts\/2020-05-31_gogll\/",
+          "name": "Go g l l general context free parsing made easy"
+        }
+    }]
+}
+</script><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Article",
+  "author": {
+    "name" : "Marius Ackerman"
+  },
+  "headline": "GoGLL: General Context-free Parsing Made Easy",
+  "description" : "Generalised LL (GLL) parsing is a practical technique of parsing general context-free grammars. Gogll is an open source compiler kit that generates a GLL parser and a finite state automaton (FSA) based lexer for any context-free grammar.\nWhat is GLL? Generalised LL (GLL) parsing [Scott 2010,2012] is a parsing technique that that can handle any context-free grammar. It parses from left to right and produces a parse forest containing all valid parse trees.",
+  "inLanguage" : "en",
+  "wordCount":  2309 ,
+  "datePublished" : "2020-05-31T00:00:00",
+  "dateModified" : "2020-05-31T00:00:00",
+  "image" : "https:\/\/username.github.io\/img\/DSC_1262.JPG",
+  "keywords" : [ "gogll, GLL, parser, lexer, Go, Rust" ],
+  "mainEntityOfPage" : "https:\/\/username.github.io\/posts\/2020-05-31_gogll\/",
+  "publisher" : {
+    "@type": "Organization",
+    "name" : "https:\/\/username.github.io",
+    "logo" : {
+        "@type" : "ImageObject",
+        "url" : "https:\/\/username.github.io\/img\/DSC_1262.JPG",
+        "height" :  60 ,
+        "width" :  60
+    }
+  }
+}
+</script>
+
+<meta property="og:title" content="GoGLL: General Context-free Parsing Made Easy" />
+<meta property="og:description" content="Generalised LL (GLL) parsing is a practical technique of parsing general context-free grammars. Gogll is an open source compiler kit that generates a GLL parser and a finite state automaton (FSA) based lexer for any context-free grammar.
+What is GLL? Generalised LL (GLL) parsing [Scott 2010,2012] is a parsing technique that that can handle any context-free grammar. It parses from left to right and produces a parse forest containing all valid parse trees.">
+<meta property="og:image" content="https://username.github.io/img/DSC_1262.JPG" />
+<meta property="og:url" content="https://username.github.io/posts/2020-05-31_gogll/" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="goccmack" />
+
+  <meta name="twitter:title" content="GoGLL: General Context-free Parsing Made Easy" />
+  <meta name="twitter:description" content="Generalised LL (GLL) parsing is a practical technique of parsing general context-free grammars. Gogll is an open source compiler kit that generates a GLL parser and a finite state automaton (FSA) …">
+  <meta name="twitter:image" content="https://username.github.io/img/DSC_1262.JPG" />
+  <meta name="twitter:card" content="summary" />
+  <link href='https://username.github.io/img/favicon.ico' rel='icon' type='image/x-icon'/>
+  <meta name="generator" content="Hugo 0.71.1" />
+  <link rel="alternate" href="https://username.github.io/index.xml" type="application/rss+xml" title="goccmack"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"><link rel="stylesheet" href="https://username.github.io/css/main.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+  <link rel="stylesheet" href="https://username.github.io/css/highlight.min.css" /><link rel="stylesheet" href="https://username.github.io/css/codeblock.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css" integrity="sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css" integrity="sha384-iD0dNku6PYSIQLyfTOpB06F2KCZJAKLOThS5HRe8b3ibhdEQ6eKsFf/EeFxdOt5R" crossorigin="anonymous">
+
+
+
+  </head>
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="https://username.github.io">goccmack</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+        
+
+        
+
+        
+      </ul>
+    </div>
+
+    
+      <div class="avatar-container">
+        <div class="avatar-img-border">
+          <a title="goccmack" href="https://username.github.io">
+            <img class="avatar-img" src="https://username.github.io/img/DSC_1262.JPG" alt="goccmack" />
+          </a>
+        </div>
+      </div>
+    
+
+  </div>
+</nav>
+
+
+
+
+    
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+
+  
+  
+  
+
+
+
+
+
+
+  
+
+  <header class="header-section ">
+    
+    <div class="intro-header no-img">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="posts-heading">
+              
+                <h1>GoGLL: General Context-free Parsing Made Easy</h1>
+              
+              
+                <hr class="small">
+              
+              
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+    
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        <p>Generalised LL (GLL) parsing is a practical technique of parsing general
+context-free grammars.
+Gogll is an <a href="https://github.com/goccmack/gogll">open source</a> compiler kit that
+generates a GLL parser and a finite state automaton (FSA) based lexer for any
+context-free grammar.</p>
+<h1 id="what-is-gll">What is GLL?</h1>
+<p>Generalised LL (GLL) parsing [Scott 2010,2012]
+is a parsing technique that that can handle any context-free
+grammar. It parses from left to right and produces a parse forest containing all
+valid parse trees.</p>
+<p>Most well-known parsing techniques, such as:
+LL(1)/LL(*) (<a href="https://www.antlr.org">ANTLR</a>),
+LALR (<a href="https://en.wikipedia.org/wiki/Yacc">Yacc</a>) or
+LR(1) (<a href="https://github.com/goccmack/gocc">gocc</a>),
+handle
+only a subset of context-free grammars and can fail unpredictably when hidden left recursion
+occurs in the grammar. Generalised LR (GLR) parsers [Grune 2008]
+also handle all context-free grammars
+but are more complex to implement than GLL.</p>
+<p>Ambiguous grammars can produce an unbounded polynomial number of derivations for
+certain input strings (see <em>Ambiguity and Parse Forests</em> below).
+GLL represents these derivations in a binarised
+shared packed parse forest (SPPF) [Scott 2012],
+which has worst-case cubic space complexity.
+The time and space complexity of the GLL algorithm is worst-case cubic
+in the length of the input string and linear for LL productions [Scott 2012].</p>
+<h1 id="what-is-gogll">What is GoGLL?</h1>
+<p>Gogll is an <a href="https://github.com/goccmack/gogll">open source</a> compiler kit that
+generates a GLL parser and its companion
+finite state automaton (FSA) based lexer for any CF grammar.
+Gogll supports Go and Rust as target languages for code generation.</p>
+<p>For syntactically valid input strings the parser returns a version of SPPF,
+called a <em>binary subtree representation</em> (BSR) <em>set</em> [Scott 2019].
+The BSR set can be walked recursively
+and disambiguated by preferentially selecting subtrees
+(see <em>Disambiguating the Parse Forest</em> below).</p>
+<h1 id="why-do-we-need-gll">Why do we need GLL?</h1>
+<ol>
+<li>General context-free (CF) grammars often require fewer symbols than
+LR(1) or LL(1)
+grammars to express the same language.</li>
+</ol>
+<p>The following excerpt is from a real query language, which was first implemented
+in LR(1) and then redone as a CFG using gogll. In the LR(1) grammar parentheses
+was required around several expressions like the one in the production shown
+below to prevent LR(1) conflicts:</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">LR(1):
+======
+
+RangeExpr :
+    ...
+    |   &#34;(&#34; LTRangeExpr  &#34;|&#34;  GTRangeExpr &#34;)&#34;
+    ...
+    ;
+
+</code></pre></div><p>In the context-free grammar the parenthesis could be omitted, simplifying the
+language to:</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">CFG:
+===
+
+RangeExpr : 
+    ...
+    |   LTRangeExpr  &#34;|&#34;  GTRangeExpr
+    ...
+    ;
+</code></pre></div><ol start="2">
+<li>LL parsers cannot handle immediate left recursion: <code>A -&gt; Aβ</code> [Grune 2008].
+When a grammar is
+rewritten to remove immediate left recursion it is often less readable than the
+original CF grammar and the syntax of the language can be obscured.</li>
+</ol>
+<p>Grammar <code>G1</code>, below, is a valid context-free grammar but is obviously left
+recursive and therefore cannot be handled by an LL parser.</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">G1
+==
+
+E : E &#34;&amp;&#34; E 
+  | E &#34;|&#34; E
+  | id
+  ;
+</code></pre></div><ol start="3">
+<li>
+<p>Hidden left recursion [Grune 2008] occurs in a grammar if a production
+<code>A</code> can derive a string <code>βAμ</code>
+in 0 or more steps and <code>β</code> can derive the empty string in one or more steps:
+<code>A =&gt;* βAμ, β =&gt;+ ε</code>.
+Neither LL nor LR parsers can handle hidden left recursion, which can be very
+indirect and hard to spot in a grammar.</p>
+</li>
+<li>
+<p>LR parsing tables can be exponential in the size of the grammar.</p>
+</li>
+<li>
+<p>Look-ahead of more than 1 is tricky [Grune 2008] in LL(k&gt;1) and LR(k&gt;1)
+parsers and leads to very large parse tables.</p>
+</li>
+<li>
+<p>Neither LL(k) nor LR(k) grammars can handle ambiguous grammars (such as <code>G1</code> above).
+An attempt to generate an LR-1 parser for <code>G1</code> results in shift-reduce conflicts.</p>
+</li>
+</ol>
+<p>But an ambiguous context-free grammar often gives the most natural definition
+of the intended language.
+For example: <code>G1</code> gives a very natural definition of simple boolean logic
+expressions (ignoring operator precedence). The grammar is ambiguous and can produce multiple valid parse trees for the
+same input string, not all of which will be logically valid. We will see later on
+how to deal with this ambiguity in <code>gogll</code>.</p>
+<p>The following grammar, <code>G2</code>, has been rewritten from <code>G1</code> to encode
+the precedence of the logic operators in the grammar.
+We can generate an LR(1) parser for this grammar, which
+will produce a single logically valid parse tree for any syntactically
+valid input string.</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">G2
+==
+
+E : E &#34;|&#34; T
+  | T
+  ;
+
+T : T &#34;&amp;&#34; id
+  | id
+  ;
+</code></pre></div><p>The following grammar, <code>G3</code>, has been rewritten from <code>G2</code> to remove
+left recursion. An
+LL(1) parser can be written or generated for <code>G3</code>. A <code>G3</code> parser would also
+produce only only one logically valid parse tree for any syntactically  valid
+input string, but it even harder to understand than <code>G2</code>.</p>
+<div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">G3
+== 
+
+E : T E1 ;
+
+E1 : &#34;|&#34; E1 
+   | ε 
+   ;
+
+T : id T1 ;
+
+T1 : &#34;&amp;&#34; id 
+   | ε 
+   ;
+</code></pre></div><ol start="7">
+<li>Context-free grammars are composable, meaning that the composition of 2 or
+more CF grammars is another CF grammar. But CF subsets, such as LL(k) or LR(k) are
+not composable in general.
+So GLL allows modular composition of grammars, something that gogll aims support
+in a future version.</li>
+</ol>
+<h1 id="ambiguity-and-parse-forests">Ambiguity and Parse Forests</h1>
+<p>A GLL parser for <code>G1</code> will produce the following two syntactically valid
+parse trees for the input string, <code>s1 = a | b &amp; c</code>:</p>
+<p><img src="/img/gogll/s1.png" alt=""></p>
+<p>The same parser produces the following five syntactically valid parse trees for the input string, <code>s2 = a | b &amp; c | d</code>:</p>
+<p><img src="/img/gogll/s2.png" alt=""></p>
+<p>In general the number of parse trees for <code>G1</code> grows as an unbounded polynomial
+of the number of operators (<code>&amp;</code>|<code>|</code>) in the input string.
+The number of parse trees for a string with <code>n</code> operators is given by the
+<a href="https://en.wikipedia.org/wiki/Catalan_number">Catalan number</a> <code>C[n]</code>.</p>
+<p><em>See [Knuth 2011] for a detailed analysis of finding all the parse trees.</em></p>
+<p>The Catalan numbers grow very fast so that the parser for <code>G1</code> will produce<br>
+<code>C[19] = 1 767 263 190</code> parse trees for the following input string:</p>
+<p><code>s3 = a1 &amp; a2 | a3 &amp; a4 | a5 &amp; a6 | a7 &amp; a8 | a9 &amp; a10 | a11 &amp; a12 | a13 &amp; a14 | a15 &amp; a16 | a17 &amp; a18 | a19 &amp; a20</code></p>
+<p>The GLL parsing technique uses a binarised shared packed parse forest [Scott 2012]
+to represent
+the valid parse trees. This technique restricts the space complexity of the
+parse forest produced by a GLL parser to
+worst-case cubic in the length of the input.</p>
+<h1 id="disambiguating-the-parse-forest">Disambiguating the Parse Forest</h1>
+<p>After successfully parsing an input string we usually have to disambiguate the
+parse forest to produce a single parse tree or abstract syntax tree,
+which is used for further processing.</p>
+<p>It is straight-forward to disambiguate the parse forest while walking it [Afroozeh 2015].
+Consider again the valid parse trees for <code>G1</code> and string <code>s1 = a | b &amp; c</code>:</p>
+<p><img src="/img/gogll/s1.png" alt=""></p>
+<p>Parse tree (1) is logically valid because <code>&amp;</code> is evaluated before <code>|</code> but
+parse tree (2) is logically invalid because <code>|</code> is evaluated first. We can
+easily disambiguate this forest by rejecting all trees with a <code>&amp;</code> node
+above a <code>|</code> node; or in other words:
+reject all trees in which a parent node has
+precedence over a child node, given the precedence relation for <code>G1</code>:
+<code>id &gt; &amp; &gt; |</code></p>
+<p>Applying the precedence rule to the parse trees for <code>G1</code> and the input string
+<code>s2 = a | b &amp; c | d</code>:</p>
+<p><img src="/img/gogll/s2.png" alt=""></p>
+<p>means that we accept parse trees (2) and (4): the only logically
+valid parse trees in the forest.
+If we require only one parse tree we could pick any of the logically valid trees
+because all are equivalent representations of the same logical expression.</p>
+<p>Additional rules could be applied, for example: to distinguish between identifiers and reserved words of a language; or other sources of ambiguity.</p>
+<p>See
+<a href="https://github.com/goccmack/gogll/tree/master/examples/g1">gogll examples/g1</a>
+for <a href="https://github.com/goccmack/gogll/blob/master/examples/g1/go/main.go">Go</a>
+and <a href="https://github.com/goccmack/gogll/blob/master/examples/g1/rust/g1/src/main.rs">Rust</a>
+implementations of the operator precedence disambiguation rule for <code>G1</code>.
+The implementations choose the first logically valid parse tree encountered while
+traversing the parse forest.</p>
+<h1 id="complexity-and-performance">Complexity and Performance</h1>
+<p>How concerned should we be about the complexity and performance of GLL parsers,
+given that the simple grammar <code>G1</code> can produce <code>1 767 263 190</code> parse trees for input
+<code>s3</code>?</p>
+<p>Scott and Johnstone proved [Scott 2012] that the space and time complexity of
+GLL is worst-case cubic  in the number of input tokens and linear for LL
+productions.</p>
+<p>In the case of <code>G1</code> and <code>s3</code> the <code>1 767 263 190</code> parse trees are represented
+in only 1369 non-terminal BSR nodes in the SPPF of the parser generated by gogll.</p>
+<p>To measure the time performance gogll was used to generate both a
+<a href="https://github.com/goccmack/gogll/tree/master/examples/g1">Rust and Go version of the lexer and parser</a>
+for <code>G1</code>.
+The disambiguation rule based on operator precedence, explained above, was implemented
+in Go and Rust and the first logically valid parse tree is selected.</p>
+<p>The BSR set implementation of the SPPF generated by gogll uses a hash set for
+non-terminal nodes. Each run of the parser on the same input therefore generates
+a forest containing the same parse trees but in random
+order. The number of nodes to walk in order to find the first valid parse tree therefore
+varies from run to run resulting in the variance in the treewalk measurements
+below. Both implementations were run 10 times to produce the
+following time measurements:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Go Parse</th>
+<th>Go Treewalk</th>
+<th>Rust Parse</th>
+<th>Rust Treewalk</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Avg</td>
+<td>2.4 ms</td>
+<td>2_808.8 ms</td>
+<td>3.6 ms</td>
+<td>1_040.5 ms</td>
+</tr>
+<tr>
+<td>Min</td>
+<td>2.3 ms</td>
+<td>6.1 ms</td>
+<td>3.0 ms</td>
+<td>5.6 ms</td>
+</tr>
+<tr>
+<td>Max</td>
+<td>2.6 ms</td>
+<td>7_258.8 ms</td>
+<td>4.0 ms</td>
+<td>3_065.1 ms</td>
+</tr>
+</tbody>
+</table>
+<ol>
+<li>Parse is measured from after lexing is complete until the BSR set is returned by the parser.</li>
+<li>Treewalk involves walking the parse forest until the first parse tree is found
+that is valid under the precedence rule (<code>id &gt; &amp; &gt; |</code>).</li>
+</ol>
+<p>From the above it is clear that the Rust and Go GLL parsers generated by gogll
+are not only feasible for terrible worst cases, but practical and fast in
+real terms.</p>
+<h1 id="history">History</h1>
+<p>The signature achievement of Computer Science is the theory of Computation
+(see [Sipser 2013] for a comprehensive introduction),
+comprising: automata and languages; computability theory; and complexity theory.</p>
+<p>The quest for practical parsing algorithms for context-free languages led to the
+landmark 1965 paper by Knuth [Knuth 1965] on LR(k) languages.</p>
+<p>De Remer invented LALR parsing in 1969 [De Remer 1969] and published
+an algorithm to generate the lookahead sets in 1982 [De Remer 1982].</p>
+<p>David Pager&rsquo;s beautiful paper
+on his <em>Practical General Method for Generating LR(k) Parsers</em> (PGM) appeared in
+1977 [Pager 1977].</p>
+<p>These two techniques, LALR and PGM, reduced the size of LR(1) parsing tables
+sufficiently to make LR parsing practical on the hardware of the
+time. Together with LL(1), LALR and LR(1) have remained the primary workhorses
+of parser writers.</p>
+<p>Much work was done in the following years to find practical parsing algorithms
+for more general context-free languages. An excellent source for parsing up to and
+including generalised LR is by Grune and Jacobs [Grune 2008].</p>
+<p>In the mean time most parser writers either hand crafted an LL(1) parser or used
+tools such as <a href="https://www.antlr.org">ANTLR</a> (LL(1)/LL(*)),
+<a href="https://en.wikipedia.org/wiki/Yacc">Yacc</a> (LALR) or
+<a href="https://github.com/goccmack/gocc">gocc</a> (LR(1))
+to generate parsers.</p>
+<p>In 2010 Scott and Johnstone published a practical algorithm for generalised LL (GLL)
+recognition [Scott 2010], which could handle
+all context free grammars.
+Their 2012 paper [Scott 2012] describes GLL parse-tree generation,
+which is necessary for a functional parser.
+In a 2019 paper with van Binsbergen [Scott 2019] they
+described a variant of the
+GLL algorithm that represents the parse forest as a set of binary subtrees.</p>
+<p>For many years I have disliked the ad hoc conflict resolution required to parse
+practical languages with a single token
+look-ahead, be it by LL(1) or LR(1).
+In 2019 I implemented a GLL parser generator for the [Scott 2019] technique.
+This compiler generator,
+which also generates a linear-time FSA lexer for the tokens of the same grammar,
+is available as open source (<a href="https://github.com/goccmack/gogll">gogll</a>).
+Since 2020 gogll generates code for both Go and Rust.</p>
+<h1 id="definition-of-terms">Definition of Terms</h1>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BSR</td>
+<td>Binary subtree representation (of an SPPF) [Scott 2019]</td>
+</tr>
+<tr>
+<td>CF</td>
+<td>Context-free (grammar or language)</td>
+</tr>
+<tr>
+<td>CFG</td>
+<td>Context-free grammar</td>
+</tr>
+<tr>
+<td>CFL</td>
+<td>Context-free language</td>
+</tr>
+<tr>
+<td>GLL</td>
+<td>Genereralised LL parsing [Scott 2010,2012,2016,2019]</td>
+</tr>
+<tr>
+<td>SPPF</td>
+<td>Shared packed parse forest [Scott 2012,2019]</td>
+</tr>
+</tbody>
+</table>
+<h1 id="bibliography">Bibliography</h1>
+<p>The following are my copies of this literature. More up to date versions may
+be available for some.</p>
+<ul>
+<li>
+<p>[Afroozeh 2015]  Ali Afroozeh and Anastasia Izmaylova<br>
+One parser to rule them all<br>
+In: <a href="https://dl.acm.org/doi/10.1145/2814228.2814242">2015 ACM International Symposium on New Ideas, New Paradigms, and Reflections on Programming and Software (Onward!)</a></p>
+</li>
+<li>
+<p>[ANTLR] Terence Parr. ANTLR (ANother Tool for Language Recognition).
+<a href="https://www.antlr.org">https://www.antlr.org</a>.</p>
+</li>
+<li>
+<p>[De Remer 1969] Franklin L. DeRemer, (1969)<br>
+Practical Translators for LR(k) languages<br>
+Ph.D thesis MIT 1969</p>
+</li>
+<li>
+<p>[De Remer 1982] Frank DeRemer and Thomas Pennello<br>
+Efficient Computation of LALR(1) Look-Ahead Sets&rdquo; (PDF)<br>
+ACM Transactions on Programming Languages and Systems. 4 (4): 615–649 (October 1982)</p>
+</li>
+<li>
+<p>[gogll] Marius Ackerman<br>
+Gogll. A compiler kit that generates GLL parsers with FSA lexers for Go and Rust.<br>
+<a href="https://github.com/goccmack/gogll">https://github.com/goccmack/gogll</a> 2020</p>
+</li>
+<li>
+<p>[Grune 2008] Dick Grune and Cerial J.H. Jacobs. <br>
+Parsing Techniques. A Practical Guide.<br>
+Monographs in Computer Science. Second Edition. <br>
+Springer 2008.</p>
+</li>
+<li>
+<p>[Grune 2012] Dick Grune, Kees van Reeuwijk, Henri E. Bal, Ceriel J.H. Jacobs and Koen Langendoen.<br>
+Modern Compiler Design. Second Edition. <br>
+Springer 2012</p>
+</li>
+<li>
+<p>[Knuth 2011] Donald E. Knuth<br>
+The Art of Computer Programming
+Volume 4A / Combinatorial Algorithms, Part 1
+Section 7.2.1.6. Generating all trees
+Pearson Addison Wesley 2011</p>
+</li>
+<li>
+<p>[Pager 1977] David Pager<br>
+A Practical General Method for Generating LR(k) Parsers<br>
+In: Acta Informatica 7, 249&ndash;268 (1977)</p>
+</li>
+<li>
+<p>[Scott 2010] Elizabeth Scott and Adrian Johnstone.<br>
+GLL Parsing.<br>
+In: Electronic Notes in Theoretical Computer Science 253 (2010) 177–189</p>
+</li>
+<li>
+<p>[Scott 2012] Elizabeth Scott and Adrian Johnstone.
+GLL parse-tree generation<br>
+Science of Computer Programming 2012</p>
+</li>
+<li>
+<p>[Scott 2016] Elizabeth Scott and Adrian Johnstone.<br>
+Structuring the GLL parsing algorithm for performance.<br>
+In: <a href="https://pure.royalholloway.ac.uk/portal/en/publications/structuring-the-gll-parsing-algorithm-for-performance(a95fc020-9918-4f17-a87a-845e2aee12b8).html">Science of Computer Programming
+Volume 125, 1 September 2016</a></p>
+</li>
+<li>
+<p>[Scott 2019] Elizabeth Scott, Adrian Johnstone and L. Thomas van Binsbergen.<br>
+Derivation representation using binary subtree sets.<br>
+In: Science of Computer Programming (175) 2019</p>
+</li>
+<li>
+<p>[Sipser 2013] Michael Sipser. <br>
+Introduction to the Theory of Computation. Third edition. <br>
+CENGAGE Learning 2013.</p>
+</li>
+</ul>
+
+
+        
+          <div class="blog-tags">
+            
+              <a href="https://username.github.io/tags/gogll/">gogll</a>&nbsp;
+            
+              <a href="https://username.github.io/tags/gll/">GLL</a>&nbsp;
+            
+              <a href="https://username.github.io/tags/parser/">parser</a>&nbsp;
+            
+              <a href="https://username.github.io/tags/lexer/">lexer</a>&nbsp;
+            
+              <a href="https://username.github.io/tags/go/">Go</a>&nbsp;
+            
+              <a href="https://username.github.io/tags/rust/">Rust</a>&nbsp;
+            
+          </div>
+        
+
+        
+            <hr/>
+            <section id="social-share">
+              <div class="list-inline footer-links">
+                
+
+<div class="share-box" aria-hidden="true">
+    <ul class="share">
+      
+      <li>
+        <a href="//twitter.com/share?url=https%3a%2f%2fusername.github.io%2fposts%2f2020-05-31_gogll%2f&amp;text=GoGLL%3a%20General%20Context-free%20Parsing%20Made%20Easy&amp;via=" target="_blank" title="Share on Twitter">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </li>
+  
+      
+      <li>
+        <a href="//www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fusername.github.io%2fposts%2f2020-05-31_gogll%2f" target="_blank" title="Share on Facebook">
+          <i class="fab fa-facebook"></i>
+        </a>
+      </li>
+  
+      
+      <li>
+        <a href="//reddit.com/submit?url=https%3a%2f%2fusername.github.io%2fposts%2f2020-05-31_gogll%2f&amp;title=GoGLL%3a%20General%20Context-free%20Parsing%20Made%20Easy" target="_blank" title="Share on Reddit">
+          <i class="fab fa-reddit"></i>
+        </a>
+      </li>
+  
+      
+      <li>
+        <a href="//www.linkedin.com/shareArticle?url=https%3a%2f%2fusername.github.io%2fposts%2f2020-05-31_gogll%2f&amp;title=GoGLL%3a%20General%20Context-free%20Parsing%20Made%20Easy" target="_blank" title="Share on LinkedIn">
+          <i class="fab fa-linkedin"></i>
+        </a>
+      </li>
+  
+      
+      <li>
+        <a href="//www.stumbleupon.com/submit?url=https%3a%2f%2fusername.github.io%2fposts%2f2020-05-31_gogll%2f&amp;title=GoGLL%3a%20General%20Context-free%20Parsing%20Made%20Easy" target="_blank" title="Share on StumbleUpon">
+          <i class="fab fa-stumbleupon"></i>
+        </a>
+      </li>
+  
+      
+      <li>
+        <a href="//www.pinterest.com/pin/create/button/?url=https%3a%2f%2fusername.github.io%2fposts%2f2020-05-31_gogll%2f&amp;description=GoGLL%3a%20General%20Context-free%20Parsing%20Made%20Easy" target="_blank" title="Share on Pinterest">
+          <i class="fab fa-pinterest"></i>
+        </a>
+      </li>
+    </ul>
+  </div>
+  
+
+              </div>
+            </section>
+        
+
+        
+          
+
+          
+        
+      </article>
+
+      
+        <ul class="pager blog-pager">
+          
+          
+        </ul>
+      
+
+
+      
+        
+        
+      
+
+    </div>
+  </div>
+</div>
+
+      
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+              <li>
+                <a href="mailto:goccmack@gmail.com" title="Email me">
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fas fa-envelope fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/goccmack" title="GitHub">
+                  <span class="fa-stack fa-lg">
+                    <i class="fas fa-circle fa-stack-2x"></i>
+                    <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                  </span>
+                </a>
+              </li>
+          
+        </ul>
+        <p class="credits copyright text-muted">
+          
+            
+              Marius Ackerman
+            
+          
+
+          &nbsp;&bull;&nbsp;&copy;
+          
+            2020
+          
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="https://username.github.io">goccmack</a>
+          
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          <a href="https://gohugo.io">Hugo v0.71.1</a> powered &nbsp;&bull;&nbsp; Theme <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a> adapted from <a href="https://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a>
+          
+        </p>
+      </div>
+    </div>
+  </div>
+</footer><script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script src="https://username.github.io/js/main.js"></script>
+<script src="https://username.github.io/js/highlight.min.js"></script>
+<script> hljs.initHighlightingOnLoad(); </script>
+<script> $(document).ready(function() {$("pre.chroma").css("padding","0");}); </script><script> renderMathInElement(document.body); </script><script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js" integrity="sha384-QELNnmcmU8IR9ZAykt67vGr9/rZJdHbiWi64V88fCPaOohUlHCqUD/unNN0BXSqy" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js" integrity="sha384-m67o7SkQ1ALzKZIFh4CiTA8tmadaujiTa9Vu+nqPSwDOqHrDmxLezTdFln8077+q" crossorigin="anonymous"></script><script src="https://username.github.io/js/load-photoswipe.js"></script>
+
+
+
+
+
+
+
+
+
+    
+  </body>
+</html>
+
