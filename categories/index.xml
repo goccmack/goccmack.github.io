@@ -2,14 +2,14 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on goccmack</title>
-    <link>https://goccmack.github.io/categories/</link>
+    <link>https://goccmack.github.io/blog/categories/</link>
     <description>Recent content in Categories on goccmack</description>
     <generator>Hugo -- gohugo.io</generator>
     <managingEditor>goccmack@gmail.com (Marius Ackerman)</managingEditor>
     <webMaster>goccmack@gmail.com (Marius Ackerman)</webMaster>
     <copyright>2020</copyright>
     
-	<atom:link href="https://goccmack.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://goccmack.github.io/blog/categories/index.xml" rel="self" type="application/rss+xml" />
     
     
   </channel>

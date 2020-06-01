@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on goccmack</title>
-    <link>https://goccmack.github.io/posts/</link>
+    <link>https://goccmack.github.io/blog/posts/</link>
     <description>Recent content in Posts on goccmack</description>
     <generator>Hugo -- gohugo.io</generator>
     <managingEditor>goccmack@gmail.com (Marius Ackerman)</managingEditor>
@@ -10,15 +10,15 @@
     <copyright>2020</copyright>
     <lastBuildDate>Sun, 31 May 2020 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://goccmack.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://goccmack.github.io/blog/posts/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>GoGLL: General Context-free Parsing Made Easy</title>
-      <link>https://goccmack.github.io/posts/2020-05-31_gogll/</link>
+      <link>https://goccmack.github.io/blog/posts/2020-05-31_gogll/</link>
       <pubDate>Sun, 31 May 2020 00:00:00 +0000</pubDate>
       <author>goccmack@gmail.com (Marius Ackerman)</author>
-      <guid>https://goccmack.github.io/posts/2020-05-31_gogll/</guid>
+      <guid>https://goccmack.github.io/blog/posts/2020-05-31_gogll/</guid>
       <description>Generalised LL (GLL) parsing is a practical technique of parsing general context-free grammars. Gogll is an open source compiler kit that generates a GLL parser and a finite state automaton (FSA) based lexer for any context-free grammar.
 What is GLL? Generalised LL (GLL) parsing [Scott 2010,2012] is a parsing technique that that can handle any context-free grammar. It parses from left to right and produces a parse forest containing all valid parse trees.</description>
     </item>
