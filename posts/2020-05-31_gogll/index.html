@@ -60,7 +60,7 @@ What is GLL? Generalised LL (GLL) parsing [Scott 2010,2012] is a parsing techniq
   "headline": "GoGLL: General Context-free Parsing Made Easy",
   "description" : "Generalised LL (GLL) parsing is a practical technique of parsing general context-free grammars. Gogll is an open source compiler kit that generates a GLL parser and a finite state automaton (FSA) based lexer for any context-free grammar.\nWhat is GLL? Generalised LL (GLL) parsing [Scott 2010,2012] is a parsing technique that that can handle any context-free grammar. It parses from left to right and produces a parse forest containing all valid parse trees.",
   "inLanguage" : "en",
-  "wordCount":  2309 ,
+  "wordCount":  2310 ,
   "datePublished" : "2020-05-31T00:00:00",
   "dateModified" : "2020-05-31T00:00:00",
   "image" : "https:\/\/goccmack.github.io\/img\/DSC_1262.JPG",
@@ -335,7 +335,7 @@ of the intended language.
 For example: <code>G1</code> gives a very natural definition of simple boolean logic
 expressions (ignoring operator precedence). The grammar is ambiguous and can produce multiple valid parse trees for the
 same input string, not all of which will be logically valid. We will see later on
-how to deal with this ambiguity in <code>gogll</code>.</p>
+how to deal with this ambiguity in gogll.</p>
 <p>The following grammar, <code>G2</code>, has been rewritten from <code>G1</code> to encode
 the precedence of the logic operators in the grammar.
 We can generate an LR(1) parser for this grammar, which
@@ -354,8 +354,8 @@ T : T &#34;&amp;&#34; id
 </code></pre></div><p>The following grammar, <code>G3</code>, has been rewritten from <code>G2</code> to remove
 left recursion. An
 LL(1) parser can be written or generated for <code>G3</code>. A <code>G3</code> parser would also
-produce only only one logically valid parse tree for any syntactically  valid
-input string, but it even harder to understand than <code>G2</code>.</p>
+produce only one logically valid parse tree for any syntactically  valid
+input string, but it is even harder to understand than <code>G2</code>.</p>
 <div class="highlight"><pre class="chroma"><code class="language-fallback" data-lang="fallback">G3
 == 
 
@@ -374,8 +374,7 @@ T1 : &#34;&amp;&#34; id
 <li>Context-free grammars are composable, meaning that the composition of 2 or
 more CF grammars is another CF grammar. But CF subsets, such as LL(k) or LR(k) are
 not composable in general.
-So GLL allows modular composition of grammars, something that gogll aims support
-in a future version.</li>
+So GLL allows modular composition of grammars, something that gogll aims to support in a future version.</li>
 </ol>
 <h1 id="ambiguity-and-parse-forests">Ambiguity and Parse Forests</h1>
 <p>A GLL parser for <code>G1</code> will produce the following two syntactically valid
@@ -516,7 +515,7 @@ recognition [Scott 2010], which could handle
 all context free grammars.
 Their 2012 paper [Scott 2012] describes GLL parse-tree generation,
 which is necessary for a functional parser.
-In a 2019 paper with van Binsbergen [Scott 2019] they
+In a 2019 paper with Van Binsbergen [Scott 2019] they
 described a variant of the
 GLL algorithm that represents the parse forest as a set of binary subtrees.</p>
 <p>For many years I have disliked the ad hoc conflict resolution required to parse
